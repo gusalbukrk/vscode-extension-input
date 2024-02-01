@@ -75,7 +75,13 @@ export function activate(context: vscode.ExtensionContext) {
 		ib.title = "My InputBox Title";
 		// ib.step = 1; // this number is shown between parentheses after title
 		// ib.totalSteps = 1; // this number is shown together with step;
-		ib.show();
+		ib.buttons = [
+			vscode.QuickInputButtons.Back, // it has predefined icon, tooltip and location
+		];
+		ib.onDidTriggerButton((button) => {
+			// console.log(button);
+			if (button === vscode.QuickInputButtons.Back) console.log('back button pressed');
+		});
 		ib.onDidAccept( async () => {
 			ib.busy = true; // show a progress indicator
 			ib.enabled = false;
@@ -86,6 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			ib.hide();
 		});
+		ib.show();
 
 		// // on Windows & Linux, a file dialog cannot be both a file selector and a folder selector
 		// const uris = await vscode.window.showOpenDialog({
