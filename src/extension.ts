@@ -34,15 +34,17 @@ export function activate(context: vscode.ExtensionContext) {
 		// // `createQuickPick` returns a `QuickPick` object
 		// // https://code.visualstudio.com/api/references/vscode-api#QuickPick&lt;T&gt;
 		// const qp = vscode.window.createQuickPick();
+		// qp.onDidHide(() => qp.dispose());
 		// qp.title = 'My QuickPick Title';
 		// qp.placeholder = 'My QuickPick PlaceHolder';
-		// qp.canSelectMany = true;
+		// // qp.canSelectMany = true;
 		// qp.items = [ { label: 'foo' }, { label: 'bar' }, { label: 'baz' } ];
-		// qp.onDidAccept( () => { // triggered when `Enter` is pressed
+		// qp.onDidAccept( () => {
+		// 	// triggered when `Enter` is pressed; when canSelectMany is false,
+		// 	// `onDidChangeSelection` can be used for the same purpose
 		// 	console.log('accepted');
-		// 	qp.hide();
 		// 	console.log(qp.selectedItems);
-		// 	qp.dispose();
+		// 	qp.hide();
 		// });
 		// qp.show();
 
@@ -61,18 +63,22 @@ export function activate(context: vscode.ExtensionContext) {
 			// must return either:
 			// - human-readable string which is presented as an error message or an InputBoxValidationMessage
 			// - undefined or null to indicate that the value is valid
-			validateInput: (input) => /^\w+$/.test(input) ? null : 'Not a valid input',
+			validateInput: (input) => { // runs at every keystroke
+				console.log('validating...');
+				return /^\w+$/.test(input) ? null : 'Not a valid input';
+			},
 		});
 		console.log(x);
 
 		const ib = vscode.window.createInputBox();
+		ib.onDidHide(() => ib.dispose());
 		ib.title = "My InputBox Title";
-		// ib.step = 1; // this number is show between parentheses after title
+		// ib.step = 1; // this number is shown between parentheses after title
+		// ib.totalSteps = 1; // this number is shown together with step;
 		ib.show();
 		ib.onDidAccept( () => {
 			console.log(ib.value);
 			ib.hide();
-			ib.dispose();
 		});
 	}));
 }
