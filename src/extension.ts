@@ -70,38 +70,48 @@ export function activate(context: vscode.ExtensionContext) {
 		// });
 		// console.log(x);
 
-		// const ib = vscode.window.createInputBox();
-		// ib.onDidHide(() => ib.dispose());
-		// ib.title = "My InputBox Title";
-		// // ib.step = 1; // this number is shown between parentheses after title
-		// // ib.totalSteps = 1; // this number is shown together with step;
-		// ib.show();
-		// ib.onDidAccept( () => {
-		// 	console.log(ib.value);
-		// 	ib.hide();
-		// });
+		const ib = vscode.window.createInputBox();
+		ib.onDidHide(() => ib.dispose());
+		ib.title = "My InputBox Title";
+		// ib.step = 1; // this number is shown between parentheses after title
+		// ib.totalSteps = 1; // this number is shown together with step;
+		ib.show();
+		ib.onDidAccept( async () => {
+			ib.busy = true; // show a progress indicator
+			ib.enabled = false;
+			await delay(10000);
+			ib.busy = false;
 
-		// on Windows & Linux, a file dialog cannot be both a file selector and a folder selector
-		const uris = await vscode.window.showOpenDialog({
-			// https://code.visualstudio.com/api/references/vscode-api#OpenDialogOptions
+			console.log(ib.value);
 
-			// canSelectFolders: true,
-			// canSelectFiles: true, // already default
-			canSelectMany: true,
-			openLabel: 'Select folder',
-			title: "My Dialog Title",
-			// defaultUri: vscode.Uri.file('home/user/Downloads/'),
-
-			// limit the file types that can be selected
-			// filters: {
-			// 	"Images": ["png", "jpg", "jpeg"],
-			// 	"TypeScript": ["ts", "tsx"],
-			// 	// "Allowed filetypes": ["png", "jpg", "jpeg", "ts", "tsx"],
-			// },
+			ib.hide();
 		});
 
-		console.log(uris);
+		// // on Windows & Linux, a file dialog cannot be both a file selector and a folder selector
+		// const uris = await vscode.window.showOpenDialog({
+		// 	// https://code.visualstudio.com/api/references/vscode-api#OpenDialogOptions
+
+		// 	// canSelectFolders: true,
+		// 	// canSelectFiles: true, // already default
+		// 	canSelectMany: true,
+		// 	openLabel: 'Select folder',
+		// 	title: "My Dialog Title",
+		// 	// defaultUri: vscode.Uri.file('home/user/Downloads/'),
+
+		// 	// limit the file types that can be selected
+		// 	// filters: {
+		// 	// 	"Images": ["png", "jpg", "jpeg"],
+		// 	// 	"TypeScript": ["ts", "tsx"],
+		// 	// 	// "Allowed filetypes": ["png", "jpg", "jpeg", "ts", "tsx"],
+		// 	// },
+		// });
+
+		// console.log(uris);
 	}));
+}
+
+function delay(ms: number): Promise<void> {
+	return new Promise((res, rej) => setTimeout(res, ms));
 }
 
 export function deactivate() {}
